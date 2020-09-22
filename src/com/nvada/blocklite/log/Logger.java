@@ -9,13 +9,13 @@ import com.nvada.blocklite.config.ConfigUtil;
 import com.nvada.blocklite.utils.FileUtil;
 
 /*
- * realize log storage
+ * 实现log日志记录功能
  * */
 
 
 public class Logger {
 	
-
+	//log文件存放的目录
 	private String logPath;
 	
 	private static Logger logger=null;
@@ -37,11 +37,11 @@ public class Logger {
 	{
 		logPath=ConfigUtil.getProjectPath();
 		
-		
+		//加上 log 目录
 		logPath=logPath+"/log";
 		// System.out.println("logPath:"+logPath);
 		
-		
+		//创建log目录
 		FileUtil.createDir(logPath,false);
 	}
 	
@@ -104,17 +104,17 @@ public class Logger {
 		outMessage(info,prepareOutFile(TRANSACTION_RECEIVE_FILE), false);
 	}
 	
-
+	//节点通信日志
 	public void logNode(String info)
 	{
 		if(info==null || info.length()<1){
 			return;
 		}
 		
-		outMessage(info,prepareOutFile(NODE_FILE), true);
+		outMessage(info,prepareOutFile(NODE_FILE), false);
 	}
 	
-
+	//事件执行日志
 	public void logEvent(String info)
 	{
 		if(info==null || info.length()<1){
@@ -124,7 +124,7 @@ public class Logger {
 		outMessage(info,prepareOutFile(EVENT_FILE), false);
 	}
 	
-
+	// 程序运行日志
 	public void logRun(String info)
 	{
 		if(info==null || info.length()<1){
@@ -134,7 +134,7 @@ public class Logger {
 		outMessage(info,prepareOutFile(RUN_FILE), false);
 	}
 	
-
+	//节点通信日志
 	public void logError(String info)
 	{
 		if(info==null || info.length()<1){
@@ -144,23 +144,23 @@ public class Logger {
 		outMessage(info,prepareOutFile(ERROR_FILE), false);
 	}
 	
-
+	//准备输出文件
 	private String prepareOutFile(String fileName)
 	{
 		String logFile=logPath+"/"+fileName;
 		
-
+		//创建日志文件
 		FileUtil.createFile(logFile,false);
 		
 		return logFile;
 	}
 	
-
+	//输出信息
 	synchronized private void outMessage(String info, String outFile, boolean printMsg)
 	{
 		RandomAccessFile logFile=null;
 		
-		
+		//调试时在控制台输出信息
 		if(printMsg || ConfigUtil.OUT_DEBUG()){
 			System.out.println(info);
 		}

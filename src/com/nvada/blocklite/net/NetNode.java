@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import com.nvada.blocklite.BlockChain;
 import com.nvada.blocklite.data.DataCell;
 import com.nvada.blocklite.data.MessageDataCell;
-import com.nvada.blocklite.data.DataService.DataCellListener;
+import com.nvada.blocklite.dataservice.DataService.DataCellListener;
 import com.nvada.blocklite.log.Logger;
 
 public abstract class NetNode {
@@ -72,7 +72,7 @@ public abstract class NetNode {
 	}
 	
 	protected void outMessage(String message) {
-		System.out.println(message);
+		// System.out.println(message);
 		writeLog(message);
 		
 		if(listener!=null){

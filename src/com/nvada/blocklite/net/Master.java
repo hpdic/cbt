@@ -32,6 +32,7 @@ public class Master extends NetNode {
     private Lock listLock = new ReentrantLock();
     
     public Master(String name, boolean recoverCrash) {
+    	System.out.println("Staring Master Node: "+System.currentTimeMillis());
     	this.nodeName = name;
     	this.logFileName = this.nodeName + "_log.txt";
     	this.recoverCrash = recoverCrash;
@@ -218,7 +219,7 @@ public class Master extends NetNode {
 
 	private void sendProposal() {
         actionId = UUID.randomUUID().toString();
-        System.out.println("current taskId : " + actionId);
+        outMessage(nodeName + " - taskId: " + actionId);
         
         executAction(Action.PROPOSAL_ACTION);
     }

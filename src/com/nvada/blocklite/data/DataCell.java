@@ -46,6 +46,14 @@ public abstract class DataCell {
 		this.weight = newWeight;
 	}
 
+	public void setSenderID(String senderID) {
+		this.senderID = senderID;
+	}
+
+	public void setReceiverID(String receiverID) {
+		this.receiverID = receiverID;
+	}
+
 	//to return senderID
 	public String getSenderID(){
 		return senderID;
@@ -59,6 +67,10 @@ public abstract class DataCell {
 	//to return time of transaction
 	public Timestamp getDtuTime(){
 		return dtuTime;
+	}
+	
+	public void setDtuTime(Timestamp stamp) {
+		this.dtuTime = stamp;
 	}
 	
 	public byte[] getData() {

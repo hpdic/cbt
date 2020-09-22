@@ -5,8 +5,8 @@ import com.nvada.blocklite.log.Logger;
 public class Simulator {
 	
 	
-	private final static int NODE_NUM = 2;
-	private final static int RUN_MILLS = 10 *60 * 1000;
+	private final static int NODE_NUM = 3;
+	private final static int RUN_MILLS = 1*60*1000;
 
 	
 	public static void main(String[] args) {

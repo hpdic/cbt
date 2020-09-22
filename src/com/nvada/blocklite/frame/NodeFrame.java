@@ -197,7 +197,7 @@ public abstract class NodeFrame extends BaseFrame implements OutPutMessageListen
 	}
 	
 	@Override
-	synchronized public void onAction(String actionName, String ack) {// NetNode调用的这个，synchronized实现临界区，一次一个线程用
+	synchronized public void onAction(String actionName, String ack) {
 		//dataset.addValue(1, ack, actionName);
 		dataset.incrementValue(1, ack, actionName);
 		
@@ -207,7 +207,7 @@ public abstract class NodeFrame extends BaseFrame implements OutPutMessageListen
 	}
 	
 	@Override
-	synchronized public void onOutMessage(String info) {//实现接口，或者实现父类方法
+	synchronized public void onOutMessage(String info) {
 		
 		if(this.contentArea == null || info==null || info.length()<1){
 			return;

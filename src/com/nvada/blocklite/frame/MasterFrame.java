@@ -5,6 +5,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.nvada.blocklite.dataservice.EtcDataService;
+import com.nvada.blocklite.dataservice.TpchDataService;
 import com.nvada.blocklite.log.Logger;
 import com.nvada.blocklite.net.Master;
 import com.nvada.blocklite.net.NetNode;
@@ -20,7 +22,7 @@ public class MasterFrame extends NodeFrame {
 	private boolean useHub = false;
 	
 	public MasterFrame() {
-		super("Coordinator");
+		super("Master");
 		
 		this.useHub = false;
 	}
@@ -96,7 +98,7 @@ public class MasterFrame extends NodeFrame {
 		String autoRecover = recoverField.getText();
 		
 		if(nodeName == null || nodeName.trim().isEmpty()) {
-			nodeField.setText("Chain.Coordinator");
+			nodeField.setText("Chain.Master");
 		}
 		
 		if( autoRecover == null || autoRecover.isEmpty() || 
@@ -112,6 +114,13 @@ public class MasterFrame extends NodeFrame {
 			return false;
 		}
 		return true;
+	}
+	
+	@Override
+	protected void onStartNode() {
+		super.onStartNode();
+		EtcDataService.instance().reset();
+		TpchDataService.instance().reset();
 	}
 	
 	@Override

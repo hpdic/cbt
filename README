@@ -1,0 +1,6 @@
+The project has been converted to a Maven project so compilation can be done via command line. The existing compilation and execution methods are not affected.
+The newly added pom.xml has the definition of maven, it declares dependencies and "manifest
+mainClass" which is the start point when executing a jar. Maven also has IDE plugins for Eclipse and IntelliJ if the UI tool is preferred.
+To compile, run mvn clean install (or mvn install) at the project level, Maven and Java are needed to compile. Maven 3.6.1 and Java 1.8 have been tested working on macOS 10.14.6 
+After successful compilation, one can execute by  java -jar target/CrossChain-0.0.1-SNAPSHOT.jar {parameters}, i.e java -jar target/CrossChain-0.0.1-SNAPSHOT.jar Node.A true
+The jar file is portable and it can be deployed to other hosts and executed.

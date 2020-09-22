@@ -3,12 +3,14 @@ import java.sql.Timestamp;
 import java.util.Random;
 
 import com.nvada.blocklite.data.Transaction;
+import com.nvada.blocklite.dataservice.DataService;
+import com.nvada.blocklite.dataservice.DataService.DataCellListener;
+import com.nvada.blocklite.dataservice.EtcDataService;
+import com.nvada.blocklite.dataservice.TxDataService;
 import com.nvada.blocklite.log.Logger;
-import com.nvada.blocklite.data.DataService.DataCellListener;
 import com.nvada.blocklite.utils.MinnerTimer;
 import com.nvada.blocklite.config.Constants;
 import com.nvada.blocklite.data.DataCell;
-import com.nvada.blocklite.data.DataService;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;
@@ -59,6 +61,7 @@ public class BlockChain implements InterChainProtocol {
 	
 	private int mainNodeId = 0;
 	
+	private TxDataService transactionService = null;
 	private DataService dataService = new DataService();
 	
 	public static int[][] DIFFCULT_MILLS = {
@@ -80,7 +83,7 @@ public class BlockChain implements InterChainProtocol {
 		}
 		
 		if(runMills > 0) {
-			if(runMills > expectIntervalMills) {
+			if(runMills >= expectIntervalMills) {
 				this.runMills = runMills;
 			} else {
 				this.runMills = 10 * expectIntervalMills;
@@ -124,6 +127,11 @@ public class BlockChain implements InterChainProtocol {
 		}
 		
 		this.runing = true;
+		
+		if(transactionService == null) {
+			transactionService = EtcDataService.instance();
+			//transactionService = TpchDataService.instance();
+		}
 		
 		createGenesisBlock();
 		createConectionGraph();
@@ -438,9 +446,13 @@ public class BlockChain implements InterChainProtocol {
 			
 		}//All types of events execution finished here
 		
-		long actualMills = System.currentTimeMillis() - startMills;
+		long endMills = System.currentTimeMillis();
+		long actualMills = endMills - startMills;
 		
-		Logger.getInstance().logRun("run end at: " + new Timestamp(System.currentTimeMillis()) + ", total time: " + actualMills);
+		System.out.println("block-end, " + actualMills + " ms");
+		transactionService.outputResult();
+		
+		Logger.getInstance().logRun("run end at: " + new Timestamp(endMills) + ", total time: " + actualMills);
 		Logger.getInstance().logRun("Simulator mills: "+ simlatorMills);
 		Logger.getInstance().logRun("total Block: " +  totalCnt + ", stale block: "+ staleCnt + ", sucess block: "+ blockCnt+", Transaction Count: " + txnCnt);
 		Logger.getInstance().logRun("Generate Block: " + (this.runMills*1.0f/blockCnt) + " ms, Generate Transaction : " + simlatorMills*1.0f/txnCnt + " ms");
@@ -538,7 +550,15 @@ public class BlockChain implements InterChainProtocol {
 				
 				// generate block success, reward 
 				Timestamp nextTxnTime = nextDataCellTransferTimestamp(currentBlock.getCreationTime().getTime(), 0, randInt(numPeers, 0));
-				Transaction mfee = new Transaction(currentNode.getUID()+"_mining_fee", Constants.GOD_ID, currentNode.getUID(), 50, nextTxnTime);
+				
+				Transaction mfee = transactionService.nextTransaction(Constants.GOD_ID, currentNode.getUID(), nextTxnTime);
+				
+				if(mfee == null) {
+					mfee = new Transaction(currentNode.getUID()+"_mining_fee", Constants.GOD_ID, currentNode.getUID(), 50, nextTxnTime);
+				} else {
+					mfee.setDtuId(currentNode.getUID()+"_mining_fee");
+				}
+				
 				Event newEvent = Event.generateDataCellEvent(mfee, nextTxnTime);
 				pendingEvents.add(newEvent);
 			} else {
@@ -629,7 +649,7 @@ public class BlockChain implements InterChainProtocol {
 				// transfer the new transcation to other peers nodes
 				transferTranscation2Peers(senderNum, -1, cell, nextEventTime);
 			}
-			//generateNextTranscation(currNode, nextEventTime);
+			// generateNextTranscation(currNode, nextEventTime);
 		}
 	}
 	
@@ -642,8 +662,17 @@ public class BlockChain implements InterChainProtocol {
 		
 		int rcvNum = randInt(numPeers, senderNum);
 		String receiverID = nodeList.get(rcvNum).getUID();
-
-		Transaction newTransaction = node.generateTxn(receiverID, 0, nextTxnTime);
+		
+		Transaction newTransaction = transactionService.nextTransaction(node.getUID(), receiverID, nextTxnTime); 
+		
+		if(newTransaction == null) {
+			newTransaction = node.generateTxn(receiverID, 0, nextTxnTime);
+		} else {
+			//newTransaction
+			newTransaction.setSenderID(node.getUID());
+			newTransaction.setReceiverID(receiverID);
+		}
+		
 		Event newEvent = Event.generateDataCellEvent(newTransaction, nextTxnTime);
 		pendingEvents.add(newEvent);
 		
@@ -730,7 +759,10 @@ public class BlockChain implements InterChainProtocol {
 	public Timestamp nextDataCellGenerateTimestamp(long baseTime, double mean) {
 		double nextTimeOffset = randFloat();
 		double nextTimeGap = -1*Math.log(nextTimeOffset)/mean;
-		nextTimeGap = 60 * 1000/6 + (int)(nextTimeGap % 10 - 5);
+		// nextTimeGap = 5 + (int)(nextTimeGap % 10 - 5);
+		nextTimeGap = 1000/6 + (int)(nextTimeGap % 10 - 5);
+		// nextTimeGap = 60 * 1000/6 + (int)(nextTimeGap % 10 - 5);
+		//System.out.println("Next time Gap: " + nextTimeGap);
 		
 		return new Timestamp(baseTime + (long)nextTimeGap);
 	}

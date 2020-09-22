@@ -1,5 +1,6 @@
 package com.nvada.blocklite.data;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 
 public class Transaction extends DataCell {
 
@@ -15,6 +16,10 @@ public class Transaction extends DataCell {
 	public Transaction(String uDtuId, String receiverID, Timestamp dtuTime) {
 		super(uDtuId, receiverID, dtuTime);
 		this.weight = 50;
+	}
+	
+	public void setDtuId(String uId) {
+		this.dtuId = uId;
 	}
 
 	//to return transaction status
@@ -34,6 +39,11 @@ public class Transaction extends DataCell {
 	@Override
 	public DataCellType type() {
 		return DataCellType.Transaction;
+	}
+	
+	public String toString() {
+		DateFormat formatter = DateFormat.getDateTimeInstance();
+		return dtuId + ", " + senderID + ", " + receiverID + ", " + weight + ", " + formatter.format(dtuTime);
 	}
 
 }

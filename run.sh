@@ -1,6 +1,7 @@
 #!/bin/env bash
 
 cd /Users/aren/DeepSingularity/tencent/project/CrossChain/
+cd /Users/user/Deepsingularity/Document/project/CrossChain/
 
 javac -classpath "./bin" ./src/com/nvada/blocklite/*.java -d ./bin
 
