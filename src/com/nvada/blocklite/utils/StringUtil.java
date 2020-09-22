@@ -4,7 +4,7 @@ import java.security.MessageDigest;
 import com.google.gson.GsonBuilder;
 
 /**
- * Generate signature
+ * 生成电子签名的工具类
  */
 public class StringUtil {
 	

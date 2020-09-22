@@ -28,7 +28,7 @@ public class ConfigFrame extends BaseFrame {
 	private List<JTextField> nodesNumFields;
 		  
 	public ConfigFrame(int workerChainNum, boolean connect2Hub) {
-		super("Participant_Chain Settings");
+		super("Worker_Chain Settings");
 		this.setExitOnClose();
 		
 		this.useHub = connect2Hub;
@@ -57,7 +57,7 @@ public class ConfigFrame extends BaseFrame {
 		scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		for (int i = 0; i < this.workerNum ; i++) {
-			String title = "Participant " + (i + 1);
+			String title = "worker " + (i + 1);
 			String nodeName = "Node" + (char)('B' + i);
 			JPanel workerPanel = new JPanel();
 			JTextArea area = new JTextArea(10, 30);
@@ -106,7 +106,7 @@ public class ConfigFrame extends BaseFrame {
 			ports[i] = Integer.parseInt(this.portFieldFields.get(i).getText());
 			WorkerFrame workerFrame = new WorkerFrame();
 			
-			workerFrame.setTitle("Participant" + (i+1));
+			workerFrame.setTitle("Worker" + (i+1));
 			workerFrame.config(nodeName, nodesNum, ports[i]);
 			workerFrame.setEditable(false);
 			workerFrame.setHideOnClose();

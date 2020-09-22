@@ -27,7 +27,7 @@ public abstract class BaseFrame {
 	public BaseFrame(String title, JPanel contentPanel) {
 		this.initedUI = false;
 		this.width = 900;
-		this.height = 450;
+		this.height = 500;
 		
 		this.title = title;
 		Random random = new Random(System.nanoTime());

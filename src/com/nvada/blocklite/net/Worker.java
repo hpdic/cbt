@@ -14,7 +14,7 @@ import com.nvada.blocklite.data.DataCell;
 import com.nvada.blocklite.data.MessageDataCell;
 import com.nvada.blocklite.log.Logger;
 
-
+// 服务端处理 TCP 连接请求的代码如下：
 public class Worker extends NetNode {
 	
 	private int port;
