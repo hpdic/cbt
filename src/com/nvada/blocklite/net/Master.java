@@ -33,6 +33,7 @@ public class Master extends NetNode {
     
     public Master(String name, boolean recoverCrash) {
     	System.out.println("Staring Master Node: "+System.currentTimeMillis());
+    	System.out.println("Tested by dzhao: Staring Master Node: "+System.currentTimeMillis());
     	this.nodeName = name;
     	this.logFileName = this.nodeName + "_log.txt";
     	this.recoverCrash = recoverCrash;
