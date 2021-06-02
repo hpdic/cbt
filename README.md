@@ -18,7 +18,7 @@ blocklite (src.com.nvada.blocklite) is the main driver of the code
 when you run the GUI without a Hub, the task count specifies the number of transactions
 
 ## Data (downloaded from the internet) diectory has all the input data
-- export-token,csv ---- real transaction history about ETC
+- export-token.csv ---- real transaction history about ETC
 - orders.csv ---- real transaction history about bitcoin
 
 libs folder has all the dependencies
